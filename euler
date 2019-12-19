@@ -1,0 +1,51 @@
+from math import *
+import matplotlib.pyplot as plt
+import csv
+
+t_awal = 0
+t_akhir = 10
+h = 0.001
+x = 0
+dx = 1
+step = int((t_akhir - t_awal) / h)
+hasil_x = []
+hasil_dx = []
+t = []
+
+with open('citra_euler.csv', mode='w') as file:
+    writer = csv.writer(file, delimiter=';', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+    writer.writerow(['t', 'x', 'dx'])
+    writer.writerow([t_awal, x, dx])
+
+    for i in range(step):
+        t_next = (i + 1) * h
+
+        d2x =  (-1* sin(x)) + (-2 * dx)
+        # d2x = (-2 * dx) - (0.5*i*e**(-i*x)) + (0.5*i*e**(i*x))
+        x_next = x + (h * dx)
+        dx_next = dx + (h * d2x)
+
+
+        hasil_dx.append(dx_next)
+        hasil_x.append(x_next)
+
+        x = x_next
+        dx = dx_next
+        t.append(t_next)
+
+        writer.writerow([round(t_next,2), round(x,3), round(dx,3)])
+
+with open('citra.csv', mode='rt') as file:
+    reader = csv.reader(file)
+    for row in reader:
+        print(row)
+
+plt.ylabel('x')
+plt.xlabel('t')
+plt.plot(t,hasil_x,color='r', label = 'h = 0.1')
+
+# plt.ylabel('dx')
+# plt.xlabel('x')
+# plt.plot(hasil_x,hasil_dx,color='b', label = 'h = 0.1')
+
+plt.show()
